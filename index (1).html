@@ -1,0 +1,1108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>NayePankh Foundation — Wings for Every Woman</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400&display=swap" rel="stylesheet"/>
+<style>
+/*──────────────────────────────────────────────
+  TOKENS — Menstruation-aware palette
+  Deep crimson × dusty rose × warm parchment
+  Accents: mauve, terracotta
+──────────────────────────────────────────────*/
+:root{
+  --crimson:   #C0392B;
+  --rose:      #E8647A;
+  --rose-lt:   #F2A0AF;
+  --mauve:     #9B4D62;
+  --parchment: #FDF5EE;
+  --blush:     #FEE8EC;
+  --charcoal:  #1A1A1A;
+  --mid:       #6B5050;
+  --divider:   #E8CDD3;
+  --white:     #FFFFFF;
+  --forest:    #1C4A2A;   /* kept for Govt badge */
+}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{
+  font-family:'DM Sans',sans-serif;
+  background:var(--parchment);
+  color:var(--charcoal);
+  line-height:1.6;
+  overflow-x:hidden;
+}
+
+/*── PETAL BACKGROUND (SVG via CSS) ──*/
+body::before{
+  content:'';
+  position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:
+    radial-gradient(ellipse 200px 200px at 10% 20%, rgba(232,100,122,.06) 0%, transparent 70%),
+    radial-gradient(ellipse 300px 300px at 90% 80%, rgba(192,57,43,.05) 0%, transparent 70%),
+    radial-gradient(ellipse 250px 250px at 50% 50%, rgba(155,77,98,.04) 0%, transparent 70%);
+}
+
+/*───────── NAV ─────────*/
+nav{
+  position:fixed;top:0;left:0;right:0;z-index:200;
+  display:flex;align-items:center;justify-content:space-between;
+  padding:.9rem 5%;
+  background:rgba(253,245,238,.92);
+  backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--divider);
+  transition:box-shadow .3s;
+}
+nav.scrolled{box-shadow:0 2px 20px rgba(192,57,43,.1);}
+
+/* LOGO — clickable to open story modal */
+.nav-logo{
+  display:flex;align-items:center;gap:.7rem;
+  text-decoration:none;cursor:pointer;
+  user-select:none;
+}
+.logo-mark{
+  width:42px;height:42px;border-radius:50%;
+  background:linear-gradient(135deg,var(--crimson),var(--rose));
+  display:flex;align-items:center;justify-content:center;
+  font-size:1.3rem;
+  box-shadow:0 2px 12px rgba(192,57,43,.3);
+  transition:transform .25s,box-shadow .25s;
+  position:relative;
+  overflow:visible;
+}
+.logo-mark::after{
+  content:'';
+  position:absolute;inset:-3px;border-radius:50%;
+  border:2px dashed rgba(232,100,122,.45);
+  animation:spin 12s linear infinite;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+.nav-logo:hover .logo-mark{transform:scale(1.08);box-shadow:0 4px 20px rgba(192,57,43,.45);}
+.logo-text{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;font-weight:900;
+  color:var(--crimson);letter-spacing:-.3px;
+}
+.logo-text span{color:var(--mauve);}
+.logo-hint{
+  font-family:'DM Mono',monospace;
+  font-size:.6rem;letter-spacing:1.5px;
+  color:var(--rose);text-transform:uppercase;
+  display:block;line-height:1;margin-top:.1rem;
+}
+
+.nav-links{display:flex;gap:1.8rem;list-style:none;}
+.nav-links a{
+  font-size:.875rem;font-weight:500;color:var(--mid);
+  text-decoration:none;transition:color .2s;
+}
+.nav-links a:hover{color:var(--crimson);}
+.nav-cta{
+  background:var(--crimson);color:var(--white);
+  padding:.5rem 1.4rem;border-radius:2rem;
+  font-size:.875rem;font-weight:600;text-decoration:none;
+  transition:background .2s,transform .15s;
+}
+.nav-cta:hover{background:#a02d1e;transform:translateY(-1px);}
+.hamburger{display:none;flex-direction:column;gap:5px;cursor:pointer;background:none;border:none;}
+.hamburger span{width:24px;height:2px;background:var(--charcoal);border-radius:2px;display:block;}
+
+/*───────── STORY MODAL ─────────*/
+.modal-overlay{
+  display:none;position:fixed;inset:0;z-index:999;
+  background:rgba(26,10,10,.7);backdrop-filter:blur(6px);
+  align-items:center;justify-content:center;
+  padding:1rem;
+}
+.modal-overlay.open{display:flex;}
+.modal{
+  background:var(--parchment);border-radius:1.6rem;
+  max-width:640px;width:100%;max-height:88vh;
+  overflow-y:auto;position:relative;
+  box-shadow:0 20px 80px rgba(0,0,0,.3);
+  animation:modalIn .35s ease;
+}
+@keyframes modalIn{from{transform:translateY(30px) scale(.97);opacity:0;}to{transform:none;opacity:1;}}
+.modal-close{
+  position:sticky;top:1rem;float:right;margin:1rem 1rem 0 0;
+  width:34px;height:34px;border-radius:50%;
+  background:var(--blush);border:none;cursor:pointer;
+  font-size:1rem;color:var(--crimson);
+  display:flex;align-items:center;justify-content:center;
+  transition:background .2s;
+}
+.modal-close:hover{background:var(--rose);color:white;}
+
+.modal-body{padding:2.5rem 2.5rem 2.5rem;}
+.modal-flower{
+  font-size:3.5rem;text-align:center;
+  margin-bottom:1rem;display:block;
+  animation:bloom .6s ease;
+}
+@keyframes bloom{from{transform:scale(0) rotate(-30deg);}to{transform:scale(1) rotate(0);}}
+.modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:2rem;font-weight:900;color:var(--crimson);
+  text-align:center;margin-bottom:.4rem;
+}
+.modal-subtitle{
+  text-align:center;color:var(--mid);
+  font-style:italic;margin-bottom:2rem;font-size:.95rem;
+}
+.story-chapter{margin-bottom:2rem;}
+.story-chapter h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;color:var(--mauve);
+  margin-bottom:.6rem;display:flex;align-items:center;gap:.5rem;
+}
+.story-chapter p{color:var(--mid);line-height:1.85;font-size:.95rem;}
+
+.founder-card{
+  display:flex;align-items:center;gap:1.2rem;
+  background:white;border-radius:1rem;
+  padding:1.2rem 1.4rem;margin-top:1.5rem;
+  border:1px solid var(--divider);
+}
+.founder-avatar{
+  width:64px;height:64px;border-radius:50%;flex-shrink:0;
+  background:linear-gradient(135deg,var(--crimson),var(--rose));
+  display:flex;align-items:center;justify-content:center;
+  font-family:'Playfair Display',serif;
+  font-size:1.8rem;color:white;font-weight:900;
+}
+.founder-name{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--charcoal);font-weight:700;}
+.founder-role{font-size:.82rem;color:var(--rose);font-weight:600;margin-top:.15rem;}
+.founder-bio{font-size:.88rem;color:var(--mid);margin-top:.5rem;line-height:1.7;}
+
+/*───────── HERO ─────────*/
+#hero{
+  min-height:100vh;
+  display:grid;grid-template-columns:1fr 1fr;
+  padding-top:68px;position:relative;z-index:1;
+}
+.hero-text{
+  display:flex;flex-direction:column;justify-content:center;
+  padding:6% 5% 6% 7%;
+}
+.hero-eyebrow{
+  font-family:'DM Mono',monospace;
+  font-size:.72rem;letter-spacing:2px;
+  color:var(--rose);text-transform:uppercase;
+  margin-bottom:1.2rem;display:flex;align-items:center;gap:.5rem;
+}
+.hero-eyebrow::before{content:'';width:28px;height:1.5px;background:var(--rose);}
+.hero-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(2.6rem,5vw,4.2rem);
+  line-height:1.08;font-weight:900;
+  color:var(--charcoal);margin-bottom:1.4rem;
+}
+.hero-title em{font-style:normal;color:var(--crimson);}
+.hero-desc{
+  font-size:1.02rem;color:var(--mid);
+  max-width:440px;margin-bottom:2.5rem;line-height:1.8;
+}
+.hero-actions{display:flex;gap:1rem;flex-wrap:wrap;}
+.btn-primary{
+  background:var(--crimson);color:white;
+  padding:.8rem 2rem;border-radius:2rem;
+  font-size:1rem;font-weight:600;text-decoration:none;
+  transition:background .2s,transform .15s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(192,57,43,.28);
+}
+.btn-primary:hover{background:#a02d1e;transform:translateY(-2px);box-shadow:0 6px 28px rgba(192,57,43,.4);}
+.btn-outline{
+  background:transparent;color:var(--crimson);
+  padding:.8rem 2rem;border-radius:2rem;
+  font-size:1rem;font-weight:600;text-decoration:none;
+  border:2px solid var(--crimson);
+  transition:background .2s,color .2s,transform .15s;
+}
+.btn-outline:hover{background:var(--crimson);color:white;transform:translateY(-2px);}
+
+/*── PIGGY BANK PANEL ──*/
+.hero-piggy{
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  background:linear-gradient(145deg,var(--blush) 0%,#fde0e5 100%);
+  position:relative;overflow:hidden;
+  padding:3rem 2rem;
+}
+.hero-piggy::before{
+  content:'🌸';font-size:8rem;
+  position:absolute;top:-20px;right:-20px;
+  opacity:.12;transform:rotate(15deg);
+  pointer-events:none;
+}
+.piggy-label{
+  font-family:'DM Mono',monospace;
+  font-size:.7rem;letter-spacing:2px;text-transform:uppercase;
+  color:var(--rose);margin-bottom:1rem;text-align:center;
+}
+.piggy-wrapper{
+  position:relative;cursor:pointer;
+  transition:transform .1s;
+  user-select:none;
+}
+.piggy-wrapper:active{transform:scale(.94);}
+
+/* SVG Piggy Bank */
+.piggy-svg{width:220px;height:220px;filter:drop-shadow(0 8px 24px rgba(192,57,43,.2));}
+.piggy-body{fill:#f8bfcc;transition:fill .15s;}
+.piggy-wrapper:hover .piggy-body{fill:#f5a8bc;}
+.piggy-ear{fill:#e89aaa;}
+.piggy-eye{fill:var(--mauve);}
+.piggy-snout{fill:#e89aaa;}
+.piggy-nostril{fill:#c96a7a;}
+.piggy-leg{fill:#e89aaa;}
+.piggy-slot{fill:#b05a70;}
+.piggy-tail path{fill:none;stroke:#e89aaa;stroke-width:4;stroke-linecap:round;}
+.piggy-coin-slot{fill:#b05a70;rx:3;}
+
+/* Coin animation layer */
+#coin-layer{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;}
+.coin{
+  position:absolute;
+  width:28px;height:28px;border-radius:50%;
+  background:radial-gradient(circle at 35% 35%, #ffd700, #c8930a);
+  border:2px solid #a87800;
+  font-size:.75rem;display:flex;align-items:center;justify-content:center;
+  font-weight:700;color:#7a5500;
+  animation:coinDrop 1s cubic-bezier(.55,.06,.68,.19) forwards;
+  box-shadow:0 2px 8px rgba(200,147,10,.5);
+}
+@keyframes coinDrop{
+  0%  {transform:translateY(-30px) scale(1);opacity:1;}
+  60% {transform:translateY(60px)  scale(1);opacity:1;}
+  80% {transform:translateY(50px)  scale(.8) rotate(15deg);opacity:.9;}
+  100%{transform:translateY(80px)  scale(0);opacity:0;}
+}
+
+.piggy-counter{
+  margin-top:1.5rem;text-align:center;
+}
+.counter-amount{
+  font-family:'Playfair Display',serif;
+  font-size:3rem;font-weight:900;color:var(--crimson);
+  line-height:1;
+}
+.counter-lbl{font-size:.8rem;color:var(--mid);margin-top:.3rem;}
+.piggy-cta{
+  margin-top:1.2rem;
+  font-size:.82rem;color:var(--mauve);font-style:italic;text-align:center;
+}
+.piggy-bounce{animation:piggyBounce .2s ease;}
+@keyframes piggyBounce{0%,100%{transform:scale(1);}50%{transform:scale(1.05) rotate(-3deg);}}
+
+.confetti-wrap{
+  position:absolute;inset:0;pointer-events:none;overflow:hidden;
+}
+
+/*───────── MARQUEE ─────────*/
+.marquee-wrap{
+  background:var(--crimson);padding:.85rem 0;overflow:hidden;
+  position:relative;z-index:1;
+}
+.marquee-track{
+  display:flex;gap:2.5rem;
+  animation:marquee 22s linear infinite;
+  white-space:nowrap;
+}
+.marquee-track span{
+  font-family:'DM Mono',monospace;font-size:.75rem;
+  letter-spacing:1.5px;text-transform:uppercase;
+  color:rgba(255,255,255,.75);
+}
+.marquee-track .dot{color:var(--rose-lt);font-size:1.1rem;line-height:1;}
+@keyframes marquee{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/*───────── SHARED SECTION ─────────*/
+section{padding:5.5rem 7%;position:relative;z-index:1;}
+.section-eyebrow{
+  font-family:'DM Mono',monospace;font-size:.72rem;
+  letter-spacing:2px;color:var(--rose);
+  text-transform:uppercase;margin-bottom:.7rem;
+}
+.section-title{
+  font-family:'Playfair Display',serif;
+  font-size:clamp(1.9rem,3.2vw,2.8rem);
+  font-weight:900;line-height:1.15;color:var(--charcoal);
+}
+
+/*───────── MENSTRUATION AWARENESS SECTION ─────────*/
+#awareness{
+  background:linear-gradient(160deg, #fff0f3 0%, var(--parchment) 100%);
+  border-top:1px solid var(--divider);border-bottom:1px solid var(--divider);
+}
+.awareness-grid{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:5rem;align-items:center;
+}
+.awareness-text .section-title{color:var(--crimson);}
+.awareness-text p{color:var(--mid);line-height:1.85;margin-top:1rem;font-size:.98rem;}
+.awareness-text p strong{color:var(--crimson);}
+
+.cycle-visual{
+  display:grid;grid-template-columns:1fr 1fr;gap:1rem;
+}
+.cycle-card{
+  background:white;border-radius:1.2rem;
+  padding:1.5rem;border:1px solid var(--divider);
+  text-align:center;
+  transition:transform .2s,box-shadow .2s;
+}
+.cycle-card:hover{transform:translateY(-4px);box-shadow:0 8px 30px rgba(192,57,43,.1);}
+.cycle-icon{font-size:2rem;margin-bottom:.6rem;}
+.cycle-name{
+  font-family:'Playfair Display',serif;
+  font-size:1rem;color:var(--crimson);font-weight:700;
+}
+.cycle-desc{font-size:.8rem;color:var(--mid);margin-top:.3rem;line-height:1.6;}
+
+.period-myths{
+  display:flex;flex-direction:column;gap:.8rem;margin-top:1.6rem;
+}
+.myth-row{
+  display:flex;gap:.8rem;align-items:flex-start;
+  background:white;border-radius:.8rem;
+  padding:.9rem 1rem;border-left:3px solid var(--rose);
+}
+.myth-row.fact{border-left-color:var(--forest);}
+.myth-badge{
+  font-size:.65rem;letter-spacing:1px;font-weight:700;
+  padding:.25rem .6rem;border-radius:1rem;flex-shrink:0;margin-top:.1rem;
+}
+.myth-badge.m{background:#fde0e5;color:var(--crimson);}
+.myth-badge.f{background:#d4edda;color:var(--forest);}
+.myth-text{font-size:.88rem;color:var(--mid);line-height:1.65;}
+
+/*───────── IMPACT ─────────*/
+#impact{
+  background:var(--crimson);
+}
+.impact-header{display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:1rem;margin-bottom:2.5rem;}
+.impact-header .section-title{color:white;}
+.impact-header .section-eyebrow{color:var(--rose-lt);}
+
+.impact-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1.2rem;}
+.impact-card{
+  background:rgba(255,255,255,.09);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:1.2rem;padding:1.8rem 1.2rem;
+  text-align:center;
+  transition:background .25s,transform .2s;
+}
+.impact-card:hover{background:rgba(255,255,255,.16);transform:translateY(-4px);}
+.impact-icon{font-size:2.2rem;margin-bottom:.6rem;}
+.impact-num{
+  font-family:'Playfair Display',serif;
+  font-size:2.4rem;font-weight:900;
+  color:var(--rose-lt);line-height:1;
+}
+.impact-lbl{color:rgba(255,255,255,.65);font-size:.85rem;margin-top:.35rem;}
+
+/*───────── CAUSES ─────────*/
+#causes{}
+.causes-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1.4rem;margin-top:3rem;}
+.cause-card{
+  background:white;border-radius:1.4rem;overflow:hidden;
+  box-shadow:0 2px 16px rgba(0,0,0,.06);
+  transition:box-shadow .25s,transform .2s;
+}
+.cause-card:hover{box-shadow:0 8px 36px rgba(192,57,43,.14);transform:translateY(-5px);}
+.cause-img{width:100%;height:190px;object-fit:cover;}
+.cause-body{padding:1.4rem;}
+.cause-tag{
+  font-family:'DM Mono',monospace;font-size:.68rem;
+  letter-spacing:1.5px;text-transform:uppercase;color:var(--rose);
+}
+.cause-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.2rem;font-weight:700;color:var(--charcoal);margin-top:.35rem;
+}
+.cause-desc{font-size:.88rem;color:var(--mid);margin-top:.5rem;line-height:1.7;}
+.progress-bar{height:6px;background:#eee;border-radius:3px;overflow:hidden;margin-top:1rem;}
+.progress-fill{height:100%;border-radius:3px;background:var(--crimson);}
+.progress-label{display:flex;justify-content:space-between;font-size:.73rem;color:var(--mid);margin-top:.35rem;}
+
+/*───────── VOLUNTEER ─────────*/
+#join{background:var(--blush);border-top:1px solid var(--divider);}
+.join-grid{display:grid;grid-template-columns:1fr 1fr;gap:5rem;align-items:start;}
+.join-text p{color:var(--mid);line-height:1.8;margin-top:1rem;}
+.join-steps{margin-top:2rem;display:flex;flex-direction:column;gap:1.3rem;}
+.join-step{display:flex;gap:1rem;align-items:flex-start;}
+.step-num{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--crimson);color:white;
+  font-family:'Playfair Display',serif;font-size:.95rem;font-weight:900;
+  display:flex;align-items:center;justify-content:center;flex-shrink:0;
+}
+.step-body strong{display:block;color:var(--charcoal);font-weight:600;font-size:.93rem;}
+.step-body span{color:var(--mid);font-size:.87rem;}
+
+.join-form{
+  background:white;border-radius:1.4rem;
+  padding:2.2rem;box-shadow:0 4px 28px rgba(192,57,43,.1);
+}
+.join-form h3{
+  font-family:'Playfair Display',serif;
+  font-size:1.4rem;color:var(--crimson);margin-bottom:1.4rem;
+}
+.form-group{margin-bottom:1.1rem;}
+.form-group label{display:block;font-size:.83rem;font-weight:600;color:var(--charcoal);margin-bottom:.35rem;}
+.form-group input,.form-group select,.form-group textarea{
+  width:100%;padding:.7rem .9rem;
+  border:1.5px solid var(--divider);border-radius:.6rem;
+  font-family:'DM Sans',sans-serif;font-size:.93rem;
+  color:var(--charcoal);background:var(--parchment);outline:none;
+  transition:border-color .2s;
+}
+.form-group input:focus,.form-group select:focus,.form-group textarea:focus{border-color:var(--rose);}
+.form-group textarea{resize:vertical;min-height:75px;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:.9rem;}
+.btn-form{
+  width:100%;background:var(--crimson);color:white;
+  padding:.85rem;border:none;border-radius:2rem;
+  font-family:'DM Sans',sans-serif;font-size:.97rem;font-weight:600;
+  cursor:pointer;transition:background .2s,transform .15s;
+}
+.btn-form:hover{background:#a02d1e;transform:translateY(-1px);}
+
+/*───────── DONATE CTA ─────────*/
+#donate-cta{
+  background:linear-gradient(135deg,var(--crimson) 0%,var(--mauve) 100%);
+  text-align:center;padding:5.5rem 7%;
+}
+#donate-cta .section-eyebrow{color:rgba(255,255,255,.65);}
+#donate-cta .section-title{color:white;margin-bottom:.8rem;}
+#donate-cta p{color:rgba(255,255,255,.82);max-width:520px;margin:0 auto 2.2rem;line-height:1.8;}
+.donate-amounts{display:flex;gap:.8rem;justify-content:center;flex-wrap:wrap;margin-bottom:2rem;}
+.donate-pill{
+  padding:.55rem 1.4rem;border-radius:2rem;
+  background:rgba(255,255,255,.15);color:white;
+  font-weight:600;cursor:pointer;border:2px solid rgba(255,255,255,.25);
+  font-family:'DM Sans',sans-serif;font-size:.92rem;transition:background .2s;
+}
+.donate-pill:hover,.donate-pill.active{background:rgba(255,255,255,.28);border-color:white;}
+.btn-donate{
+  background:white;color:var(--crimson);
+  padding:.85rem 2.8rem;border-radius:2rem;
+  font-size:1.02rem;font-weight:700;text-decoration:none;display:inline-block;
+  transition:transform .15s,box-shadow .2s;
+  box-shadow:0 4px 20px rgba(0,0,0,.15);
+}
+.btn-donate:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,0,0,.2);}
+
+/*───────── FOOTER ─────────*/
+footer{background:var(--charcoal);padding:4rem 7% 2rem;}
+.footer-grid{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;gap:3rem;}
+.footer-brand .logo-text{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:900;color:var(--rose-lt);}
+.footer-brand p{color:rgba(255,255,255,.45);margin-top:.8rem;font-size:.86rem;line-height:1.75;max-width:260px;}
+.footer-col h4{color:white;font-weight:600;font-size:.88rem;margin-bottom:.9rem;}
+.footer-col ul{list-style:none;}
+.footer-col ul li{margin-bottom:.45rem;}
+.footer-col ul li a{color:rgba(255,255,255,.45);text-decoration:none;font-size:.85rem;transition:color .2s;}
+.footer-col ul li a:hover{color:var(--rose-lt);}
+.footer-contact{color:rgba(255,255,255,.45);font-size:.85rem;line-height:1.9;}
+.footer-contact a{color:var(--rose-lt);text-decoration:none;}
+.footer-bottom{
+  border-top:1px solid rgba(255,255,255,.1);
+  margin-top:3rem;padding-top:1.5rem;
+  display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:1rem;
+}
+.footer-bottom p{color:rgba(255,255,255,.35);font-size:.8rem;}
+.social-links{display:flex;gap:.7rem;}
+.social-link{
+  width:32px;height:32px;border-radius:50%;
+  background:rgba(255,255,255,.1);text-decoration:none;
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;transition:background .2s;
+}
+.social-link:hover{background:var(--rose);}
+
+/*───────── REVEAL ─────────*/
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.visible{opacity:1;transform:none;}
+
+/*───────── MOBILE ─────────*/
+@media(max-width:900px){
+  #hero{grid-template-columns:1fr;min-height:auto;}
+  .hero-piggy{min-height:50vw;}
+  .hero-text{padding:3rem 5%;}
+  #awareness .awareness-grid,#join .join-grid,
+  .footer-grid{grid-template-columns:1fr;gap:2.5rem;}
+  .impact-grid{grid-template-columns:repeat(2,1fr);}
+  .causes-grid{grid-template-columns:1fr;}
+  .nav-links{display:none;}
+  .hamburger{display:flex;}
+  .cycle-visual{grid-template-columns:1fr;}
+}
+@media(max-width:540px){
+  section{padding:3.5rem 5%;}
+  .impact-grid{grid-template-columns:1fr 1fr;}
+  .footer-grid{grid-template-columns:1fr;}
+  .modal-body{padding:1.5rem 1.3rem 2rem;}
+}
+</style>
+</head>
+<body>
+
+<!-- ══════════ STORY MODAL ══════════ -->
+<div class="modal-overlay" id="storyModal" role="dialog" aria-modal="true" aria-label="Story of NayePankh">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Close">✕</button>
+    <div class="modal-body">
+      <span class="modal-flower">🪷</span>
+      <div class="modal-title">The Story of NayePankh</div>
+      <div class="modal-subtitle">"नये पंख" — New Wings</div>
+
+      <div class="story-chapter">
+        <h3>🌱 How the Name Was Born</h3>
+        <p>
+          In Hindi, <strong>"Naye Pankh"</strong> means <em>New Wings</em>. The name was chosen deliberately — not just as a metaphor for freedom, but as a lived belief. When a young girl receives education, a woman gets access to menstrual hygiene, or a hungry child gets a warm meal — they aren't being helped. They're being given <em>wings</em> they already deserved.
+        </p>
+        <p style="margin-top:.8rem">
+          The founders, a group of passionate students from Kanpur, saw something stark around them: the same society that produced engineers and doctors also had families who couldn't afford food or sanitary pads. They decided to act locally, while thinking globally. And they needed a name that wasn't about charity — it was about <strong>dignity and possibility</strong>. NayePankh was born.
+        </p>
+      </div>
+
+      <div class="story-chapter">
+        <h3>🔥 The Spark: A Real Incident</h3>
+        <p>
+          The trigger wasn't a boardroom decision. It was a conversation with a girl who had missed weeks of school because she had no sanitary pads and couldn't afford them. She wasn't unintelligent. She wasn't unmotivated. She was simply failed by a gap in access. That conversation lit a fire — <em>"if not us, who? If not now, when?"</em>
+        </p>
+      </div>
+
+      <div class="story-chapter">
+        <h3>📍 Early Days</h3>
+        <p>
+          Starting with barely 10 volunteers and very limited funds, the foundation held its first food drive in Kanpur — distributing meals to over 200 families. Word spread. Students from other colleges joined. The foundation grew to cover Ghaziabad and several other UP cities, and has since assisted <strong>over 2 lakh people</strong> across food, clothing, education, and hygiene drives.
+        </p>
+      </div>
+
+      <div class="story-chapter">
+        <h3>🏛️ Official Recognition</h3>
+        <p>
+          NayePankh Foundation is today registered with the UP Government and holds <strong>80G & 12A certifications</strong> under the Indian Income Tax Act — meaning every donation you make is tax-exempt. It is recognized as one of the largest student-led NGOs in India.
+        </p>
+      </div>
+
+      <div class="founder-card">
+        <div class="founder-avatar">P</div>
+        <div>
+          <div class="founder-name">Prashant Shukla</div>
+          <div class="founder-role">Founder & President, NayePankh Foundation</div>
+          <div class="founder-bio">A student at heart and a changemaker by choice, Prashant co-founded NayePankh with a belief that collective small actions can solve the biggest problems. His guiding motto: <em>"If we all do something, then together there is no problem that we cannot solve!"</em></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ══════════ NAV ══════════ -->
+<nav id="navbar">
+  <div class="nav-logo" id="logoBtn" role="button" tabindex="0" aria-label="Open our story">
+    <div class="logo-mark">🪷</div>
+    <div>
+      <div class="logo-text">Naye<span>Pankh</span></div>
+      <div class="logo-hint">Click — hear our story</div>
+    </div>
+  </div>
+  <ul class="nav-links">
+    <li><a href="#awareness">Awareness</a></li>
+    <li><a href="#impact">Impact</a></li>
+    <li><a href="#causes">Causes</a></li>
+    <li><a href="#join">Volunteer</a></li>
+  </ul>
+  <a href="#donate-cta" class="nav-cta">Donate ₹1</a>
+  <button class="hamburger" id="hamburger" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</nav>
+
+<!-- ══════════ HERO ══════════ -->
+<section id="hero">
+  <div class="hero-text reveal">
+    <div class="hero-eyebrow">UP Govt · 80G &amp; 12A Registered NGO</div>
+    <h1 class="hero-title">
+      New <em>wings</em> for every woman and child
+    </h1>
+    <p class="hero-desc">
+      NayePankh Foundation fights hunger, breaks menstrual taboos, and gives underprivileged communities in India the dignity and access they deserve — one rupee, one pad, one meal at a time.
+    </p>
+    <div class="hero-actions">
+      <a href="#donate-cta" class="btn-primary">Donate Now</a>
+      <a href="#join" class="btn-outline">Volunteer With Us</a>
+    </div>
+  </div>
+
+  <!-- PIGGY BANK -->
+  <div class="hero-piggy">
+    <div class="piggy-label">🪙 Click the piggy — add ₹1 to our cause</div>
+    <div class="piggy-wrapper" id="piggyBtn" role="button" tabindex="0" aria-label="Add one rupee donation">
+      <div class="confetti-wrap" id="confettiWrap"></div>
+      <svg class="piggy-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" id="piggySvg">
+        <!-- Body -->
+        <ellipse class="piggy-body" cx="105" cy="115" rx="68" ry="60"/>
+        <!-- Head -->
+        <circle class="piggy-body" cx="62" cy="90" r="36"/>
+        <!-- Ear -->
+        <ellipse class="piggy-ear" cx="50" cy="60" rx="12" ry="16"/>
+        <ellipse style="fill:#f8bfcc" cx="50" cy="62" rx="7" ry="11"/>
+        <!-- Snout -->
+        <ellipse class="piggy-snout" cx="40" cy="96" rx="14" ry="11"/>
+        <circle class="piggy-nostril" cx="35" cy="97" r="3"/>
+        <circle class="piggy-nostril" cx="45" cy="97" r="3"/>
+        <!-- Eye -->
+        <circle class="piggy-eye" cx="57" cy="81" r="5"/>
+        <circle style="fill:white" cx="59" cy="79" r="1.5"/>
+        <!-- Coin slot on top -->
+        <rect class="piggy-slot" x="92" y="56" width="28" height="6" rx="3"/>
+        <!-- Legs -->
+        <rect class="piggy-leg" x="72" y="162" width="16" height="22" rx="8"/>
+        <rect class="piggy-leg" x="98" y="165" width="16" height="22" rx="8"/>
+        <rect class="piggy-leg" x="124" y="162" width="16" height="22" rx="8"/>
+        <rect class="piggy-leg" x="150" y="162" width="16" height="22" rx="8"/>
+        <!-- Tail -->
+        <g class="piggy-tail">
+          <path d="M172,100 Q188,90 185,108 Q182,122 170,118"/>
+        </g>
+        <!-- Flower blush -->
+        <text x="120" y="130" font-size="22" opacity=".35">🌸</text>
+      </svg>
+      <div id="coin-layer"></div>
+    </div>
+
+    <div class="piggy-counter">
+      <div class="counter-amount">₹<span id="totalAmount">0</span></div>
+      <div class="counter-lbl">contributed in this session</div>
+    </div>
+    <div class="piggy-cta">Every ₹1 funds a sanitary pad for a girl in need 🩸</div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-wrap">
+  <div class="marquee-track" id="marquee">
+    <span>Break the Period Taboo</span><span class="dot">✦</span>
+    <span>Free Sanitary Pads</span><span class="dot">✦</span>
+    <span>Education for Girls</span><span class="dot">✦</span>
+    <span>Free Food Drives</span><span class="dot">✦</span>
+    <span>Clothing Donations</span><span class="dot">✦</span>
+    <span>2 Lakh+ Served</span><span class="dot">✦</span>
+    <span>UP Govt. Registered</span><span class="dot">✦</span>
+    <span>Student-Led NGO</span><span class="dot">✦</span>
+    <span>Break the Period Taboo</span><span class="dot">✦</span>
+    <span>Free Sanitary Pads</span><span class="dot">✦</span>
+    <span>Education for Girls</span><span class="dot">✦</span>
+    <span>Free Food Drives</span><span class="dot">✦</span>
+    <span>Clothing Donations</span><span class="dot">✦</span>
+    <span>2 Lakh+ Served</span><span class="dot">✦</span>
+    <span>UP Govt. Registered</span><span class="dot">✦</span>
+    <span>Student-Led NGO</span><span class="dot">✦</span>
+  </div>
+</div>
+
+<!-- ══════════ AWARENESS ══════════ -->
+<section id="awareness">
+  <div class="awareness-grid reveal">
+    <div class="awareness-text">
+      <div class="section-eyebrow">Period Awareness</div>
+      <h2 class="section-title">Menstruation is <em style="color:var(--crimson);font-style:normal">not</em> a taboo</h2>
+      <p>In India, <strong>over 300 million women</strong> menstruate every month, yet the majority lack access to safe, hygienic products. Girls miss school. Women miss work. And silence keeps the cycle going.</p>
+      <p>NayePankh Foundation works to <strong>break that silence</strong> — distributing sanitary pads, conducting awareness workshops in schools and communities, and creating a world where getting your period doesn't cost you your future.</p>
+      <div class="period-myths">
+        <div class="myth-row">
+          <span class="myth-badge m">Myth</span>
+          <span class="myth-text">Women shouldn't enter the kitchen or temple during menstruation.</span>
+        </div>
+        <div class="myth-row fact">
+          <span class="myth-badge f">Fact</span>
+          <span class="myth-text">Menstruation is a completely normal biological process. There are no medical, scientific, or valid religious reasons to restrict a menstruating person's activities.</span>
+        </div>
+        <div class="myth-row">
+          <span class="myth-badge m">Myth</span>
+          <span class="myth-text">Talking about periods is shameful or inappropriate.</span>
+        </div>
+        <div class="myth-row fact">
+          <span class="myth-badge f">Fact</span>
+          <span class="myth-text">Open conversation about periods saves lives. Girls who understand menstrual health stay in school, seek medical help when needed, and live healthier lives.</span>
+        </div>
+      </div>
+    </div>
+    <div>
+      <div class="section-eyebrow" style="margin-bottom:1.2rem">The Menstrual Cycle</div>
+      <div class="cycle-visual">
+        <div class="cycle-card">
+          <div class="cycle-icon">🌑</div>
+          <div class="cycle-name">Menstrual Phase</div>
+          <div class="cycle-desc">Days 1–5. The uterine lining sheds. Cramping is normal — it does not mean weakness.</div>
+        </div>
+        <div class="cycle-card">
+          <div class="cycle-icon">🌿</div>
+          <div class="cycle-name">Follicular Phase</div>
+          <div class="cycle-desc">Days 1–13. Energy rises. The body prepares an egg for possible fertilization.</div>
+        </div>
+        <div class="cycle-card">
+          <div class="cycle-icon">🌕</div>
+          <div class="cycle-name">Ovulation</div>
+          <div class="cycle-desc">Day 14. The egg is released. Peak fertility and energy — this is not a disease.</div>
+        </div>
+        <div class="cycle-card">
+          <div class="cycle-icon">🍂</div>
+          <div class="cycle-name">Luteal Phase</div>
+          <div class="cycle-desc">Days 15–28. The body winds down. PMS symptoms like fatigue are real and valid.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ IMPACT ══════════ -->
+<section id="impact">
+  <div class="impact-header reveal">
+    <div>
+      <div class="section-eyebrow">Our Impact</div>
+      <h2 class="section-title">Numbers that tell our story</h2>
+    </div>
+  </div>
+  <div class="impact-grid reveal">
+    <div class="impact-card"><div class="impact-icon">🩸</div><div class="impact-num" data-target="25000">0</div><div class="impact-lbl">Sanitary Pads Distributed</div></div>
+    <div class="impact-card"><div class="impact-icon">🍱</div><div class="impact-num" data-target="50000">0</div><div class="impact-lbl">Meals Provided</div></div>
+    <div class="impact-card"><div class="impact-icon">📚</div><div class="impact-num" data-target="10000">0</div><div class="impact-lbl">Children Educated</div></div>
+    <div class="impact-card"><div class="impact-icon">👗</div><div class="impact-num" data-target="15000">0</div><div class="impact-lbl">Clothes Donated</div></div>
+  </div>
+</section>
+
+<!-- ══════════ CAUSES ══════════ -->
+<section id="causes">
+  <div class="reveal">
+    <div class="section-eyebrow">What We Do</div>
+    <h2 class="section-title">Every cause needs a champion</h2>
+  </div>
+  <div class="causes-grid reveal">
+    <div class="cause-card">
+      <img class="cause-img" src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YKbL494Mv8Ip3qgy/whatsapp-image-2023-02-05-at-9.13.05-am-AzGEo7LOeZi2gn9v.jpeg" alt="Food distribution" loading="lazy"/>
+      <div class="cause-body">
+        <div class="cause-tag">🍱 Food Security</div>
+        <div class="cause-title">Fighting Hunger, One Meal at a Time</div>
+        <div class="cause-desc">Regular food drives in underserved areas ensure no child or family goes to bed hungry in our city.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:75%"></div></div>
+        <div class="progress-label"><span>₹3.75L raised</span><span>Goal: ₹5L</span></div>
+      </div>
+    </div>
+    <div class="cause-card">
+      <img class="cause-img" src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=768,h=963,fit=crop/YKbL494Mv8Ip3qgy/1-YD0yJ4erqEIN3ZWV.jpeg" alt="Education" loading="lazy"/>
+      <div class="cause-body">
+        <div class="cause-tag">📚 Education</div>
+        <div class="cause-title">Every Girl Has the Right to Learn</div>
+        <div class="cause-desc">Keeping girls in school with free stationery, tutoring, and hygiene kits — because period poverty shouldn't interrupt education.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:60%"></div></div>
+        <div class="progress-label"><span>₹1.8L raised</span><span>Goal: ₹3L</span></div>
+      </div>
+    </div>
+    <div class="cause-card">
+      <img class="cause-img" src="https://assets.zyrosite.com/cdn-cgi/image/format=auto,w=1920,fit=crop/YKbL494Mv8Ip3qgy/whatsapp-image-2023-02-15-at-9.17.30-pm-AVLPXr08jETq2nyv.jpeg" alt="Hygiene" loading="lazy"/>
+      <div class="cause-body">
+        <div class="cause-tag">🩸 Menstrual Hygiene</div>
+        <div class="cause-title">Dignity Through Hygiene Access</div>
+        <div class="cause-desc">We distribute sanitary pads and hygiene kits, and run awareness workshops to normalise periods across communities.</div>
+        <div class="progress-bar"><div class="progress-fill" style="width:88%"></div></div>
+        <div class="progress-label"><span>₹4.4L raised</span><span>Goal: ₹5L</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ VOLUNTEER ══════════ -->
+<section id="join">
+  <div class="join-grid reveal">
+    <div class="join-text">
+      <div class="section-eyebrow">Get Involved</div>
+      <h2 class="section-title">Your time, skill, or ₹1 — it all matters</h2>
+      <p>We don't ask for much, just help us with what you can — be it money, skill, or your time. Every contribution moves the needle for someone in need.</p>
+      <div class="join-steps">
+        <div class="join-step">
+          <div class="step-num">1</div>
+          <div class="step-body"><strong>Fill the form</strong><span>Tell us who you are and what you'd love to contribute.</span></div>
+        </div>
+        <div class="join-step">
+          <div class="step-num">2</div>
+          <div class="step-body"><strong>We reach out in 48 hrs</strong><span>Our team connects to discuss the best way you can help.</span></div>
+        </div>
+        <div class="join-step">
+          <div class="step-num">3</div>
+          <div class="step-body"><strong>Make your impact</strong><span>Join a drive, teach, distribute pads, or donate — however you can.</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="join-form">
+      <h3>🌸 Join Our Team</h3>
+      <div class="form-row">
+        <div class="form-group"><label>First Name</label><input type="text" placeholder="Riya"/></div>
+        <div class="form-group"><label>Last Name</label><input type="text" placeholder="Sharma"/></div>
+      </div>
+      <div class="form-group"><label>Email</label><input type="email" placeholder="riya@email.com"/></div>
+      <div class="form-group"><label>Phone</label><input type="tel" placeholder="+91 98765 43210"/></div>
+      <div class="form-group">
+        <label>How would you like to help?</label>
+        <select>
+          <option value="">Select an option</option>
+          <option>Distribute sanitary pads / hygiene kits</option>
+          <option>Volunteer my time at food drives</option>
+          <option>Donate money</option>
+          <option>Teach or tutor children</option>
+          <option>Donate clothes or food items</option>
+          <option>Social media / tech support</option>
+        </select>
+      </div>
+      <div class="form-group"><label>Message (optional)</label><textarea placeholder="Tell us about yourself…"></textarea></div>
+      <button class="btn-form" id="formBtn">Submit →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ══════════ DONATE CTA ══════════ -->
+<section id="donate-cta">
+  <div class="reveal">
+    <div class="section-eyebrow">Make a Difference</div>
+    <h2 class="section-title">Your donation is<br/>tax-exempt under 80G</h2>
+    <p>Every rupee directly supports our food drives, sanitary pad distribution, and education programs. Choose an amount — or click the piggy bank above!</p>
+    <div class="donate-amounts">
+      <div class="donate-pill" onclick="selectAmount(this)">₹50</div>
+      <div class="donate-pill active" onclick="selectAmount(this)">₹200</div>
+      <div class="donate-pill" onclick="selectAmount(this)">₹500</div>
+      <div class="donate-pill" onclick="selectAmount(this)">₹1,000</div>
+      <div class="donate-pill" onclick="selectAmount(this)">Custom</div>
+    </div>
+    <a href="https://nayepankh.com/donate" target="_blank" class="btn-donate">Donate Securely →</a>
+  </div>
+</section>
+
+<!-- ══════════ FOOTER ══════════ -->
+<footer>
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <div class="logo-text">Naye<span style="color:var(--rose)">Pankh</span></div>
+      <p>A UP Government registered NGO giving wings to underprivileged communities through food, education, and menstrual hygiene access.</p>
+      <p style="margin-top:.6rem">Donations exempt under 80G & 12A of Indian Income Tax Act.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Pages</h4>
+      <ul>
+        <li><a href="#awareness">Period Awareness</a></li>
+        <li><a href="#impact">Our Impact</a></li>
+        <li><a href="#causes">Causes</a></li>
+        <li><a href="#join">Volunteer</a></li>
+        <li><a href="https://nayepankh.com/our-certificates" target="_blank">Certificates</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Legal</h4>
+      <ul>
+        <li><a href="https://nayepankh.com/terms-and-conditions" target="_blank">Terms & Conditions</a></li>
+        <li><a href="https://nayepankh.com/privacy-policy" target="_blank">Privacy Policy</a></li>
+        <li><a href="https://nayepankh.com/cancellation-and-refund" target="_blank">Refund Policy</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <div class="footer-contact">
+        <a href="mailto:contact@nayepankh.com">contact@nayepankh.com</a><br/>
+        <a href="tel:+918318500748">+91 83185 00748</a><br/><br/>
+        Kanpur &amp; Ghaziabad,<br/>Uttar Pradesh, India
+      </div>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <p>© 2024 NayePankh Foundation. All rights reserved.</p>
+    <div class="social-links">
+      <a href="https://www.instagram.com/nayepankhfoundation" class="social-link" target="_blank" title="Instagram">📸</a>
+      <a href="https://www.linkedin.com/company/nayepankh" class="social-link" target="_blank" title="LinkedIn">💼</a>
+      <a href="https://www.youtube.com/@nayepankhfoundation" class="social-link" target="_blank" title="YouTube">▶️</a>
+      <a href="https://www.facebook.com/nayepankhfoundation" class="social-link" target="_blank" title="Facebook">👥</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ─── STORY MODAL ─── */
+const modal   = document.getElementById('storyModal');
+const logoBtn = document.getElementById('logoBtn');
+const closeBtn= document.getElementById('modalClose');
+
+function openModal(){modal.classList.add('open'); document.body.style.overflow='hidden';}
+function closeModal(){modal.classList.remove('open'); document.body.style.overflow='';}
+
+logoBtn.addEventListener('click', openModal);
+logoBtn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') openModal(); });
+closeBtn.addEventListener('click', closeModal);
+modal.addEventListener('click', e=>{ if(e.target===modal) closeModal(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeModal(); });
+
+/* ─── NAV SCROLL ─── */
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY>20);
+});
+
+/* ─── SCROLL REVEAL ─── */
+const revealObs = new IntersectionObserver(entries=>{
+  entries.forEach(e=>{ if(e.isIntersecting) e.target.classList.add('visible'); });
+},{threshold:.1});
+document.querySelectorAll('.reveal').forEach(el=>revealObs.observe(el));
+
+/* ─── PIGGY BANK + COIN SOUND ─── */
+let totalAmount = 0;
+const piggyBtn    = document.getElementById('piggyBtn');
+const totalEl     = document.getElementById('totalAmount');
+const coinLayer   = document.getElementById('coin-layer');
+const piggySvg    = document.getElementById('piggySvg');
+
+// Web Audio API coin sound
+function playCoinSound(){
+  try{
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    const now = ctx.currentTime;
+
+    // High metallic ping
+    const osc1 = ctx.createOscillator();
+    const gain1= ctx.createGain();
+    osc1.connect(gain1); gain1.connect(ctx.destination);
+    osc1.frequency.setValueAtTime(1200, now);
+    osc1.frequency.exponentialRampToValueAtTime(800, now+0.12);
+    gain1.gain.setValueAtTime(.45, now);
+    gain1.gain.exponentialRampToValueAtTime(.001, now+.22);
+    osc1.type='sine'; osc1.start(now); osc1.stop(now+.25);
+
+    // Subtle clink overtone
+    const osc2 = ctx.createOscillator();
+    const gain2= ctx.createGain();
+    osc2.connect(gain2); gain2.connect(ctx.destination);
+    osc2.frequency.setValueAtTime(2400, now);
+    osc2.frequency.exponentialRampToValueAtTime(1600, now+.08);
+    gain2.gain.setValueAtTime(.2, now);
+    gain2.gain.exponentialRampToValueAtTime(.001, now+.15);
+    osc2.type='triangle'; osc2.start(now); osc2.stop(now+.18);
+
+    setTimeout(()=>ctx.close(), 400);
+  }catch(e){}
+}
+
+function spawnCoin(){
+  const coin = document.createElement('div');
+  coin.className = 'coin';
+  coin.textContent = '₹';
+  // random x near the slot (centre of piggy SVG ~110px wide)
+  const x = 85 + Math.random()*30;
+  coin.style.left = x + 'px';
+  coin.style.top  = '20px';
+  coinLayer.appendChild(coin);
+  setTimeout(()=>coin.remove(), 1100);
+}
+
+function spawnConfetti(){
+  const wrap = document.getElementById('confettiWrap');
+  const colors=['#E8647A','#C0392B','#F2A0AF','#9B4D62','#ffd700','#fff'];
+  for(let i=0;i<12;i++){
+    const p=document.createElement('div');
+    const size=6+Math.random()*6;
+    p.style.cssText=`
+      position:absolute;width:${size}px;height:${size}px;
+      background:${colors[Math.floor(Math.random()*colors.length)]};
+      border-radius:${Math.random()>.5?'50%':'2px'};
+      left:${30+Math.random()*40}%;top:40%;
+      animation:confettiFly ${.7+Math.random()*.5}s ease forwards;
+      opacity:1;
+    `;
+    wrap.appendChild(p);
+    setTimeout(()=>p.remove(),1200);
+  }
+}
+
+// Confetti keyframe (injected once)
+const styleEl = document.createElement('style');
+styleEl.textContent=`
+@keyframes confettiFly{
+  0%{transform:translate(0,0) rotate(0);opacity:1;}
+  100%{transform:translate(${(Math.random()-.5)*120}px,-${60+Math.random()*80}px) rotate(${360*Math.random()}deg);opacity:0;}
+}`;
+document.head.appendChild(styleEl);
+
+function handlePiggyClick(){
+  playCoinSound();
+  spawnCoin();
+  spawnConfetti();
+  totalAmount++;
+  totalEl.textContent = totalAmount.toLocaleString('en-IN');
+
+  // Bounce piggy
+  piggySvg.classList.remove('piggy-bounce');
+  void piggySvg.offsetWidth; // reflow
+  piggySvg.classList.add('piggy-bounce');
+  setTimeout(()=>piggySvg.classList.remove('piggy-bounce'),220);
+
+  // Milestone messages
+  const msgMap = {10:'🎉 ₹10 raised!',25:'🌸 25 coins!',50:'💪 ₹50!',100:'🏆 ₹100 legend!'};
+  if(msgMap[totalAmount]){
+    const toast=document.createElement('div');
+    toast.textContent=msgMap[totalAmount];
+    toast.style.cssText=`
+      position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);
+      background:var(--crimson);color:white;padding:.7rem 1.6rem;
+      border-radius:2rem;font-weight:600;font-size:.95rem;
+      z-index:9999;box-shadow:0 4px 20px rgba(0,0,0,.2);
+      animation:fadeInUp .3s ease;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(()=>toast.remove(),2500);
+  }
+}
+
+piggyBtn.addEventListener('click', handlePiggyClick);
+piggyBtn.addEventListener('keydown', e=>{ if(e.key==='Enter'||e.key===' ') handlePiggyClick(); });
+
+const fadeStyle=document.createElement('style');
+fadeStyle.textContent=`@keyframes fadeInUp{from{opacity:0;transform:translate(-50%,20px);}to{opacity:1;transform:translate(-50%,0);}}`;
+document.head.appendChild(fadeStyle);
+
+/* ─── IMPACT COUNTERS ─── */
+function animateCounter(el){
+  const target=parseInt(el.dataset.target);
+  const suffix=target>=1000?'+':'';
+  let count=0;
+  const step=Math.ceil(target/80);
+  const timer=setInterval(()=>{
+    count=Math.min(count+step,target);
+    el.textContent=count.toLocaleString('en-IN')+suffix;
+    if(count>=target) clearInterval(timer);
+  },18);
+}
+const counterObs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{
+    if(e.isIntersecting){
+      e.target.querySelectorAll('.impact-num[data-target]').forEach(animateCounter);
+      counterObs.unobserve(e.target);
+    }
+  });
+},{threshold:.3});
+const impactSec=document.getElementById('impact');
+if(impactSec) counterObs.observe(impactSec);
+
+/* ─── DONATE PILLS ─── */
+function selectAmount(el){
+  document.querySelectorAll('.donate-pill').forEach(p=>p.classList.remove('active'));
+  el.classList.add('active');
+}
+
+/* ─── FORM SUBMIT ─── */
+document.getElementById('formBtn').addEventListener('click',function(){
+  this.textContent='✓ Thank you! We\'ll be in touch within 48 hrs.';
+  this.style.background='#1C4A2A';
+  this.disabled=true;
+});
+</script>
+</body>
+</html>
